@@ -20,11 +20,11 @@ agent any
                 script {
                     echo "building the docker image..."
                     withCredentials([
-                        usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+                        usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')
                     ]) {
-                    sh 'docker build -t oluwasade/java-app:jma-3.0 .'
-                    sh 'echo $ | docker login -u $USER --password-stdin'
-                    sh 'docker push oluwasade/java-app:jma-3.0'
+                    sh 'docker build -t oluwasade/demo-app:jma-2.0 .'
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push oluwasade/demo-app:jma-2.0'
                     }
                 }
             }
