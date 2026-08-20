@@ -1,6 +1,6 @@
 pipeline {
 
-agent
+agent any
     tools {
         maven 'maven-3.9'
     }
@@ -20,11 +20,12 @@ agent
                 script {
                     echo "building the docker image..."
                     withCredentials([
-                        usernamePassword(credentials: 'docker-credentials', usernameVariable: USER, passwordVariable: PWD)
-                    ])
+                        usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+                    ]) {
                     sh 'docker build -t oluwasade/java-app:jma-3.0 .'
                     sh 'echo $ | docker login -u $USER --password-stdin'
                     sh 'docker push oluwasade/java-app:jma-3.0'
+                    }
                 }
             }
         }
