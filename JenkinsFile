@@ -16,7 +16,20 @@ agent any
             }
         }
 
+        stage('testCode') {
+            steps {
+                script {
+                    gv.testSourceCode()
+                }
+            }
+        }
+
         stage('build jar') {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps {
                 script {
                     gv.buildJar()
@@ -25,6 +38,11 @@ agent any
         }
 
         stage('build image') {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps {
                 script {
                     gv.buildImage()
@@ -33,6 +51,11 @@ agent any
         }
 
         stage('deploy') {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps {
                 script {
                     gv.deployApp()
