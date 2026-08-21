@@ -3,12 +3,18 @@ def buildJar() {
     sh 'mvn package'
 }
 
+def testSourceCode() {
+    echo 'testing the application...'
+    sh 'mvn test'
+}
+
 def buildImage() {
     echo "building the docker image..."
-    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        sh 'docker build -t nanatwn/demo-app:jma-2.0 .'
+    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        sh 'docker build -t oluwasade/demo-app:jma-2.1 .'
         sh 'echo $PASS | docker login -u $USER --password-stdin'
-        sh 'docker push nanatwn/demo-app:jma-2.0'
+        sh 'docker push oluwasade/demo-app:jma-2.1'
+
     }
 }
 
