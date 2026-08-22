@@ -1,8 +1,14 @@
 #!/usr/bin/env groovy
 
-// If there is no variable definition below @Library line we have to end this line with _ like illustrated below:
+// Note that this is for global scoped shared library. If there is no variable definition below @Library line we have to end this line with _ like illustrated below:
 // @Library('jenkins-shared-lib')_
 @Library('jenkins-shared-lib')
+
+// for project scoped shared library the syntax to gain access to functions within this repo will be like below:
+// library identifier: 'jenkins-shared-lib@master', retriever: modernSCM(
+//         [$class: 'GitSCMSource',
+//         remote: 'https://github.com/OyedunOye/jenkins-shared-library.git',
+//         credentialsId: 'gitlab-credentials'])
 def gv
 
 pipeline {   
@@ -38,7 +44,9 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                    buildImage()
+                    buildImage 'oluwasade/demo-app:jma-4.0'
+                    dockerLogin()
+                    pushImage 'oluwasade/demo-app:jma-4.0'
                 }
             }
         }
