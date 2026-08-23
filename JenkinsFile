@@ -77,6 +77,27 @@ pipeline {
                     gv.deployApp()
                 }
             }
-        }               
+        }
+
+        stage('commit version update') {
+            steps {
+                script {
+//                 this is my github login global cred id auto generated since I didn't provide one on creation and can't edit this id later
+                    withCredentials([usernamePassword(credentialsId: 'd333e4b1-eb71-43bf-8485-7f068c14b823', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "Jenkins"'
+
+                        sh 'git status'
+                        sh 'git branch'
+                        sh 'git config --list'
+
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/OyedunOye/jenkins-demo.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci:version bump from successful Jenkins build"'
+                        sh "git push origin HEAD:${BRANCH_NAME}"
+                    }
+                }
+            }
+        }
     }
 }
